@@ -90,9 +90,11 @@ func (twc TWConf) Wrap(text string, indent int) {
 }
 
 // Wrap2Indent will print the text onto the configured writer but wraps and
-// indents the text. The first line printed will have a different indent from
-// the other lines. It will always print at least MinCharsToPrint chars but
-// will try to fit the text into TargetLineLen chars.
+//  indents the text. It will split the text into paragraphs at any newline
+//  characters. The first line printed of each paragraph will be indented by
+//  the first supplied indent and the other lines will be indented by the
+//  second indent value. It will always print at least MinCharsToPrint chars
+//  but will try to fit the text into TargetLineLen chars.
 func (twc TWConf) Wrap2Indent(text string, firstLineIndent, otherLineIndent int) {
 	firstLineMaxWidth := int(
 		math.Max(
