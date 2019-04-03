@@ -134,3 +134,47 @@ func TestWrap2Indent(t *testing.T) {
 		}
 	}
 }
+
+func TestWrap3Indent(t *testing.T) {
+	testCases := []struct {
+		testhelper.ID
+		firstLineIndent     int
+		paraFirstLineIndent int
+		otherLineIndent     int
+		text                string
+		expText             string
+	}{
+		{
+			ID:                  testhelper.MkID("idents: 2, 3"),
+			firstLineIndent:     2,
+			paraFirstLineIndent: 3,
+			otherLineIndent:     4,
+			text:                "aaa bbb ccc\nddd eee fff ggg hhh iii jjj",
+			expText: `  aaa bbb ccc
+   ddd eee fff ggg
+    hhh iii jjj
+`,
+		},
+	}
+
+	for _, tc := range testCases {
+		var buf bytes.Buffer
+		twc, err := twrap.NewTWConf(
+			twrap.TWConfOptSetWriter(&buf),
+			twrap.TWConfOptSetMinChars(10),
+			twrap.TWConfOptSetTargetLineLen(20))
+		if err != nil {
+			t.Fatal(tc.IDStr(), ": Couldn't create the TWConf: ", err)
+		}
+		twc.Wrap3Indent(tc.text,
+			tc.firstLineIndent, tc.paraFirstLineIndent, tc.otherLineIndent)
+		if buf.String() != tc.expText {
+			t.Log(tc.IDStr())
+			t.Log("\t: expected:")
+			t.Log(tc.expText)
+			t.Log("\t: got:")
+			t.Log(buf.String())
+			t.Errorf("\t: Wrap3Indent failed\n")
+		}
+	}
+}
