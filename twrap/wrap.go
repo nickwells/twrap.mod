@@ -120,7 +120,7 @@ func (twc TWConf) Wrap2Indent(text string, firstLineIndent, otherLineIndent int)
 	twc.Wrap3Indent(text, firstLineIndent, firstLineIndent, otherLineIndent)
 }
 
-// Wrap2Indent will print the text as with Wrap. The first line printed will
+// Wrap3Indent will print the text as with Wrap. The first line printed will
 // be indented by the first supplied indent, thereafter the first line of
 // each paragraph will be indented by the second supplied indent and any
 // other lines will be indented by the third indent value.
