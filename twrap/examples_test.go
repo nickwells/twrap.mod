@@ -6,8 +6,9 @@ import (
 	"github.com/nickwells/twrap.mod/twrap"
 )
 
-// ExampleWrap provides an exaple of how the twrap.Wrap method might be used
-func ExampleWrap() {
+// ExampleTWConf_Wrap provides an exaple of how the twrap.Wrap method might
+// be used
+func ExampleTWConf_Wrap() {
 	twc, err := twrap.NewTWConf()
 	if err != nil {
 		fmt.Println("cannot construct the TWConf object:", err)
@@ -22,9 +23,9 @@ func ExampleWrap() {
 	//                     gentle rain from heaven. Upon the place beneath.
 }
 
-// ExampleWrapPrefixed provides an exaple of how the twrap.WrapPrefixed method
-// might be used
-func ExampleWrapPrefixed() {
+// ExampleTWConf_WrapPrefixed provides an exaple of how the
+// twrap.WrapPrefixed method might be used
+func ExampleTWConf_WrapPrefixed() {
 	twc, err := twrap.NewTWConf()
 	if err != nil {
 		fmt.Println("cannot construct the TWConf object:", err)
