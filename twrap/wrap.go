@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+const (
+	DfltMinCharsToPrint = 30
+	DfltTargetLineLen   = 80
+)
+
 // TWConf holds the configuration for a text wrapper
 type TWConf struct {
 	W               io.Writer
@@ -78,8 +83,8 @@ func SetTargetLineLen(n int) TWConfOptFunc {
 func NewTWConf(opts ...TWConfOptFunc) (*TWConf, error) {
 	twc := &TWConf{
 		W:               os.Stdout,
-		MinCharsToPrint: 30,
-		TargetLineLen:   80,
+		MinCharsToPrint: DfltMinCharsToPrint,
+		TargetLineLen:   DfltTargetLineLen,
 	}
 
 	for _, o := range opts {
