@@ -14,3 +14,15 @@ twc.Wrap("the quality of mercy is not strained", 5)
 ```
 
 More examples are available in the example test files.
+
+There are also various `Print` functions which simply call `fmt.Fprint` functions and allow you to write:
+
+```go
+twc.Print("Hello")
+```
+
+rather than:
+
+```go
+fmt.Fprint(twc.W, "Hello")
+```
