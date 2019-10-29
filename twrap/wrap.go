@@ -1,106 +1,10 @@
 package twrap
 
 import (
-	"errors"
 	"fmt"
-	"io"
 	"math"
-	"os"
 	"strings"
 )
-
-const (
-	DfltMinCharsToPrint = 30
-	DfltTargetLineLen   = 80
-)
-
-// TWConf holds the configuration for a text wrapper
-type TWConf struct {
-	W               io.Writer
-	MinCharsToPrint int
-	TargetLineLen   int
-}
-
-// TWConfOptFunc is the signature of the function that is passed to the
-// NewTWConf function to override the default values
-type TWConfOptFunc func(*TWConf) error
-
-// TWConfOptSetWriter - see SetWriter
-func TWConfOptSetWriter(w io.Writer) TWConfOptFunc {
-	return SetWriter(w)
-}
-
-// SetWriter returns a TWConfOptFunc suitable for passing to
-// NewTWConf which will set the MinCharsToPrint
-func SetWriter(w io.Writer) TWConfOptFunc {
-	return func(twc *TWConf) error {
-		if w == nil {
-			return errors.New("the Writer must not be nil")
-		}
-		twc.W = w
-		return nil
-	}
-}
-
-// TWConfOptSetMinChars - see SetMinChars
-func TWConfOptSetMinChars(n int) TWConfOptFunc {
-	return SetMinChars(n)
-}
-
-// SetMinChars returns a TWConfOptFunc suitable for passing to
-// NewTWConf which will set the MinCharsToPrint
-func SetMinChars(n int) TWConfOptFunc {
-	return func(twc *TWConf) error {
-		if n < 0 {
-			return errors.New(
-				"the minimum number of chars to print on a line must be >= 0")
-		}
-		twc.MinCharsToPrint = n
-		return nil
-	}
-}
-
-// TWConfOptSetTargetLineLen - see SetTargetLineLen
-func TWConfOptSetTargetLineLen(n int) TWConfOptFunc {
-	return SetTargetLineLen(n)
-}
-
-// SetTargetLineLen returns a TWConfOptFunc suitable for passing to
-// NewTWConf which will set the TargetLineLen
-func SetTargetLineLen(n int) TWConfOptFunc {
-	return func(twc *TWConf) error {
-		if n <= 0 {
-			return errors.New("the target line length must be > 0")
-		}
-		twc.TargetLineLen = n
-		return nil
-	}
-}
-
-// NewTWConf constructs a TWConf with the default values. To override the
-// default values pass the appropriate option functions. If any of the
-// option funcs returns an error the error is returned and a nil value
-func NewTWConf(opts ...TWConfOptFunc) (*TWConf, error) {
-	twc := &TWConf{
-		W:               os.Stdout,
-		MinCharsToPrint: DfltMinCharsToPrint,
-		TargetLineLen:   DfltTargetLineLen,
-	}
-
-	for _, o := range opts {
-		err := o(twc)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if twc.MinCharsToPrint > twc.TargetLineLen {
-		return nil,
-			fmt.Errorf("the minimum number of characters to print (%d)"+
-				" must be less than the target line length (%d)",
-				twc.MinCharsToPrint, twc.TargetLineLen)
-	}
-	return twc, nil
-}
 
 // WrapPrefixed will print the text as with Wrap. The first line will start
 // with the prefix and the indent of the subsequent lines will be adjusted to
@@ -121,7 +25,10 @@ func (twc TWConf) Wrap(text string, indent int) {
 // Wrap2Indent will print the text as with Wrap. The first line printed of
 // each paragraph will be indented by the first supplied indent and the other
 // lines will be indented by the second indent value.
-func (twc TWConf) Wrap2Indent(text string, firstLineIndent, otherLineIndent int) {
+func (twc TWConf) Wrap2Indent(
+	text string,
+	firstLineIndent, otherLineIndent int,
+) {
 	twc.Wrap3Indent(text, firstLineIndent, firstLineIndent, otherLineIndent)
 }
 
@@ -129,7 +36,10 @@ func (twc TWConf) Wrap2Indent(text string, firstLineIndent, otherLineIndent int)
 // be indented by the first supplied indent, thereafter the first line of
 // each paragraph will be indented by the second supplied indent and any
 // other lines will be indented by the third indent value.
-func (twc TWConf) Wrap3Indent(text string, firstLineIndent, paraFirstLineIndent, otherLineIndent int) {
+func (twc TWConf) Wrap3Indent(
+	text string,
+	firstLineIndent, paraFirstLineIndent, otherLineIndent int,
+) {
 	firstLineMaxWidth := int(
 		math.Max(
 			float64(twc.MinCharsToPrint),
