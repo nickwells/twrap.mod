@@ -10,6 +10,7 @@ import (
 const (
 	DfltMinCharsToPrint = 30
 	DfltTargetLineLen   = 80
+	DfltListPrefix      = "-"
 )
 
 // TWConf holds the configuration for a text wrapper
@@ -17,6 +18,7 @@ type TWConf struct {
 	W               io.Writer
 	MinCharsToPrint int
 	TargetLineLen   int
+	ListPrefix      string
 }
 
 // TWConfOptFunc is the signature of the function that is passed to the
@@ -60,6 +62,15 @@ func SetMinChars(n int) TWConfOptFunc {
 	}
 }
 
+// SetListPrefix returns a TWConfOptFunc suitable for passing to
+// NewTWConf which will set the ListPrefix
+func SetListPrefix(pfx string) TWConfOptFunc {
+	return func(twc *TWConf) error {
+		twc.ListPrefix = pfx
+		return nil
+	}
+}
+
 // TWConfOptSetTargetLineLen
 // Deprecated: use SetTargetLineLen instead
 func TWConfOptSetTargetLineLen(n int) TWConfOptFunc {
@@ -86,6 +97,7 @@ func NewTWConf(opts ...TWConfOptFunc) (*TWConf, error) {
 		W:               os.Stdout,
 		MinCharsToPrint: DfltMinCharsToPrint,
 		TargetLineLen:   DfltTargetLineLen,
+		ListPrefix:      DfltListPrefix,
 	}
 
 	for _, o := range opts {

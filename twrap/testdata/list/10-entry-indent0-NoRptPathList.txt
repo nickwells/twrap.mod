@@ -1,0 +1,10 @@
+- entry with no path parts
+- entry1
+- part1/part2/entry2
+-             entry3
+-             entry4: Very long text that is expected to wrap. Blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah.
+-             entry5
+-       part3/entry6 with some trailing text
+-       part4/entry7
+- part5/entry8
+-       part6/entry9
