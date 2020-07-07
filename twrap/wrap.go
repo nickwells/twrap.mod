@@ -40,6 +40,10 @@ func (twc TWConf) Wrap3Indent(
 	text string,
 	firstLineIndent, paraFirstLineIndent, otherLineIndent int,
 ) {
+	if text == "" {
+		return
+	}
+
 	firstLineMaxWidth := int(
 		math.Max(
 			float64(twc.MinCharsToPrint),

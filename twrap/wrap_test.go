@@ -35,10 +35,9 @@ func TestWrap(t *testing.T) {
 `,
 		},
 		{
-			ID:   testhelper.MkID("no indent - empty string"),
-			text: "",
-			expText: `
-`,
+			ID:      testhelper.MkID("no indent - empty string"),
+			text:    "",
+			expText: ``,
 		},
 		{
 			ID:   testhelper.MkID("no indent - multiple WS in middle"),
