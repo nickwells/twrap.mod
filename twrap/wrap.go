@@ -38,55 +38,45 @@ func (twc TWConf) Wrap2Indent(
 // other lines will be indented by the third indent value.
 func (twc TWConf) Wrap3Indent(
 	text string,
-	firstLineIndent, paraFirstLineIndent, otherLineIndent int,
+	line1Indent, paraLine1Indent, line2Indent int,
 ) {
 	if text == "" {
 		return
 	}
 
-	firstLineMaxWidth := int(
+	// work out how much space we have between the indent and the end of line
+	line1MaxLen := int(
 		math.Max(
 			float64(twc.MinCharsToPrint),
-			float64(twc.TargetLineLen-firstLineIndent)))
-	paraFirstLineMaxWidth := int(
+			float64(twc.TargetLineLen-line1Indent)))
+	paraLine1MaxLen := int(
 		math.Max(
 			float64(twc.MinCharsToPrint),
-			float64(twc.TargetLineLen-paraFirstLineIndent)))
-	otherLineMaxWidth := int(
+			float64(twc.TargetLineLen-paraLine1Indent)))
+	line2MaxLen := int(
 		math.Max(
 			float64(twc.MinCharsToPrint),
-			float64(twc.TargetLineLen-otherLineIndent)))
+			float64(twc.TargetLineLen-line2Indent)))
 
 	paras := strings.Split(text, "\n")
-	prefix := strings.Repeat(" ", otherLineIndent)
-	firstLinePrefix := strings.Repeat(" ", firstLineIndent)
-	maxWidth := firstLineMaxWidth
+	prefix := strings.Repeat(" ", line2Indent)
+	line1Prefix := strings.Repeat(" ", line1Indent)
+	maxLen := line1MaxLen
 
 	for _, para := range paras {
-		fmt.Fprint(twc.W, firstLinePrefix)
+		fmt.Fprint(twc.W, line1Prefix)
 
 		lineLen := 0
 		word := make([]rune, 0, len(para))
-		spaces := make([]rune, 0, maxWidth)
+		spaces := make([]rune, 0, maxLen)
 		for _, r := range para {
 			if r == ' ' {
 				if len(word) > 0 {
-					if lineLen == 0 {
-						lineLen = len(word)
-						word = twc.printAndClear(word)
-						spaces = spaces[:0]
-					} else if lineLen+len(word)+len(spaces) <= maxWidth {
-						lineLen += len(word) + len(spaces)
-						spaces = twc.printAndClear(spaces)
-						word = twc.printAndClear(word)
-					} else {
-						fmt.Fprintln(twc.W)
-						maxWidth = otherLineMaxWidth
-						fmt.Fprint(twc.W, prefix)
-						lineLen = len(word)
-						word = twc.printAndClear(word)
-						spaces = spaces[:0]
-					}
+					lineLen, maxLen = twc.printWord(word, spaces,
+						prefix,
+						lineLen, maxLen, line2MaxLen)
+					word = word[:0]
+					spaces = spaces[:0]
 				}
 
 				spaces = append(spaces, r)
@@ -96,30 +86,31 @@ func (twc TWConf) Wrap3Indent(
 		}
 
 		if len(word) > 0 {
-			if lineLen == 0 {
-				twc.printAndClear(word)
-			} else if lineLen+len(word)+len(spaces) <= maxWidth {
-				twc.printAndClear(spaces)
-				twc.printAndClear(word)
-			} else {
-				fmt.Fprintln(twc.W)
-				fmt.Fprint(twc.W, prefix)
-				twc.printAndClear(word)
-			}
+			twc.printWord(word, spaces, prefix, lineLen, maxLen, line2MaxLen)
 		}
 
 		fmt.Fprintln(twc.W)
 
-		firstLinePrefix = strings.Repeat(" ", paraFirstLineIndent)
-		maxWidth = paraFirstLineMaxWidth
+		line1Prefix = strings.Repeat(" ", paraLine1Indent)
+		maxLen = paraLine1MaxLen
 	}
 }
 
-// printAndClear prints a slice of runes as a string and clears the slice
-func (twc TWConf) printAndClear(word []rune) []rune {
-	if len(word) > 0 {
+// printWord prints the word and any leading spaces and returns the new line
+// length and the new max length
+func (twc TWConf) printWord(word, spaces []rune, prefix string, lineLen, maxLen, nextMaxLen int) (int, int) {
+	if lineLen == 0 { // always print the 1st word regardless of its length
 		fmt.Fprint(twc.W, string(word))
-		word = word[:0]
+		return len(word), maxLen
 	}
-	return word
+
+	if lineLen+len(word)+len(spaces) <= maxLen { // word & space fit in the line
+		lineLen += len(word) + len(spaces)
+		fmt.Fprint(twc.W, string(spaces)+string(word))
+		return lineLen, maxLen
+	}
+
+	fmt.Fprintln(twc.W)
+	fmt.Fprint(twc.W, prefix+string(word))
+	return len(word), nextMaxLen
 }
