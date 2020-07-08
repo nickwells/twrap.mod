@@ -64,7 +64,10 @@ func (twc TWConf) Wrap3Indent(
 	maxLen := line1MaxLen
 
 	for _, para := range paras {
-		fmt.Fprint(twc.W, line1Prefix)
+		para = strings.TrimSpace(para)
+		if para != "" {
+			fmt.Fprint(twc.W, line1Prefix)
+		}
 
 		lineLen := 0
 		word := make([]rune, 0, len(para))
