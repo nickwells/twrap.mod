@@ -82,14 +82,8 @@ bbb ccc
 			t.Fatal(tc.IDStr(), ": Couldn't create the TWConf: ", err)
 		}
 		twc.Wrap(tc.text, tc.indent)
-		if buf.String() != tc.expText {
-			t.Log(tc.IDStr())
-			t.Log("\t: expected:")
-			t.Log(tc.expText)
-			t.Log("\t: got:")
-			t.Log(buf.String())
-			t.Errorf("\t: Wrap failed\n")
-		}
+		testhelper.CmpValString(t, tc.IDStr(), "wrapped text",
+			buf.String(), tc.expText)
 	}
 }
 
@@ -102,7 +96,7 @@ func TestWrap2Indent(t *testing.T) {
 		expText         string
 	}{
 		{
-			ID:              testhelper.MkID("idents: 2, 3"),
+			ID:              testhelper.MkID("indents: 2, 3"),
 			firstLineIndent: 2,
 			otherLineIndent: 3,
 			text:            "aaa bbb ccc ddd eee fff ggg hhh iii jjj",
@@ -123,14 +117,9 @@ func TestWrap2Indent(t *testing.T) {
 			t.Fatal(tc.IDStr(), ": Couldn't create the TWConf: ", err)
 		}
 		twc.Wrap2Indent(tc.text, tc.firstLineIndent, tc.otherLineIndent)
-		if buf.String() != tc.expText {
-			t.Log(tc.IDStr())
-			t.Log("\t: expected:")
-			t.Log(tc.expText)
-			t.Log("\t: got:")
-			t.Log(buf.String())
-			t.Errorf("\t: Wrap2Indent failed\n")
-		}
+		testhelper.CmpValString(t, tc.IDStr(), "wrapped text",
+			buf.String(), tc.expText)
+
 	}
 }
 
@@ -144,7 +133,7 @@ func TestWrap3Indent(t *testing.T) {
 		expText             string
 	}{
 		{
-			ID:                  testhelper.MkID("idents: 2, 3"),
+			ID:                  testhelper.MkID("indents: 2, 3, 4"),
 			firstLineIndent:     2,
 			paraFirstLineIndent: 3,
 			otherLineIndent:     4,
@@ -167,13 +156,7 @@ func TestWrap3Indent(t *testing.T) {
 		}
 		twc.Wrap3Indent(tc.text,
 			tc.firstLineIndent, tc.paraFirstLineIndent, tc.otherLineIndent)
-		if buf.String() != tc.expText {
-			t.Log(tc.IDStr())
-			t.Log("\t: expected:")
-			t.Log(tc.expText)
-			t.Log("\t: got:")
-			t.Log(buf.String())
-			t.Errorf("\t: Wrap3Indent failed\n")
-		}
+		testhelper.CmpValString(t, tc.IDStr(), "wrapped text",
+			buf.String(), tc.expText)
 	}
 }
