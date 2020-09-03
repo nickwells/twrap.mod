@@ -82,7 +82,7 @@ bbb ccc
 			t.Fatal(tc.IDStr(), ": Couldn't create the TWConf: ", err)
 		}
 		twc.Wrap(tc.text, tc.indent)
-		testhelper.CmpValString(t, tc.IDStr(), "wrapped text",
+		testhelper.DiffString(t, tc.IDStr(), "wrapped text",
 			buf.String(), tc.expText)
 	}
 }
@@ -117,7 +117,7 @@ func TestWrap2Indent(t *testing.T) {
 			t.Fatal(tc.IDStr(), ": Couldn't create the TWConf: ", err)
 		}
 		twc.Wrap2Indent(tc.text, tc.firstLineIndent, tc.otherLineIndent)
-		testhelper.CmpValString(t, tc.IDStr(), "wrapped text",
+		testhelper.DiffString(t, tc.IDStr(), "wrapped text",
 			buf.String(), tc.expText)
 
 	}
@@ -156,7 +156,7 @@ func TestWrap3Indent(t *testing.T) {
 		}
 		twc.Wrap3Indent(tc.text,
 			tc.firstLineIndent, tc.paraFirstLineIndent, tc.otherLineIndent)
-		testhelper.CmpValString(t, tc.IDStr(), "wrapped text",
+		testhelper.DiffString(t, tc.IDStr(), "wrapped text",
 			buf.String(), tc.expText)
 	}
 }
