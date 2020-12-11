@@ -64,7 +64,6 @@ func (twc TWConf) Wrap3Indent(
 	maxLen := line1MaxLen
 
 	for _, para := range paras {
-		para = strings.TrimSpace(para)
 		if para != "" {
 			fmt.Fprint(twc.W, line1Prefix)
 		}
@@ -102,9 +101,10 @@ func (twc TWConf) Wrap3Indent(
 // printWord prints the word and any leading spaces and returns the new line
 // length and the new max length
 func (twc TWConf) printWord(word, spaces []rune, prefix string, lineLen, maxLen, nextMaxLen int) (int, int) {
-	if lineLen == 0 { // always print the 1st word regardless of its length
-		fmt.Fprint(twc.W, string(word))
-		return len(word), maxLen
+	if lineLen == 0 {
+		// always print 1st word regardless of length (with leading spaces)
+		fmt.Fprint(twc.W, string(spaces)+string(word))
+		return len(spaces) + len(word), maxLen
 	}
 
 	if lineLen+len(word)+len(spaces) <= maxLen { // word & space fit in the line

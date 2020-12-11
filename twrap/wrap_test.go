@@ -30,8 +30,8 @@ func TestWrap(t *testing.T) {
 		},
 		{
 			ID:   testhelper.MkID("no indent - leading WS"),
-			text: "           123 ",
-			expText: `123
+			text: "   123 ",
+			expText: `   123
 `,
 		},
 		{
