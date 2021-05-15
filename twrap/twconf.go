@@ -121,7 +121,6 @@ func NewTWConf(opts ...TWConfOptFunc) (*TWConf, error) {
 // and so a panic is appropriate.
 func NewTWConfOrPanic(opts ...TWConfOptFunc) *TWConf {
 	twc, err := NewTWConf(opts...)
-
 	if err != nil {
 		panic(fmt.Errorf("Couldn't create a new TWConf: %w", err))
 	}
