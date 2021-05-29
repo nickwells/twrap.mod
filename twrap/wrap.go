@@ -2,8 +2,14 @@ package twrap
 
 import (
 	"math"
+	"regexp"
 	"strings"
+	"unicode"
 )
+
+// we break the string to be wrapped into paragraphs on either newlines or
+// form feeds
+var paraBreakRE = regexp.MustCompile("[\n\f]")
 
 // WrapPrefixed will print the text as with Wrap. The first line will start
 // with the prefix and the indent of the subsequent lines will be adjusted to
@@ -57,7 +63,7 @@ func (twc TWConf) Wrap3Indent(
 			float64(twc.MinCharsToPrint),
 			float64(twc.TargetLineLen-line2Indent)))
 
-	paras := strings.Split(text, "\n")
+	paras := paraBreakRE.Split(text, -1)
 	prefix := strings.Repeat(" ", line2Indent)
 	line1Prefix := strings.Repeat(" ", line1Indent)
 	maxLen := line1MaxLen
