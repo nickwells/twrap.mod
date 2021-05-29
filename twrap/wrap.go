@@ -77,7 +77,7 @@ func (twc TWConf) Wrap3Indent(
 		word := make([]rune, 0, len(para))
 		spaces := make([]rune, 0, maxLen)
 		for _, r := range para {
-			if r == ' ' { // TODO: use unicode.IsSpace and disregard NBSP
+			if unicode.IsSpace(r) && r != '\u00a0' { // break on space, not NBSP
 				if len(word) > 0 {
 					lineLen, maxLen = twc.printWord(word, spaces,
 						prefix,
