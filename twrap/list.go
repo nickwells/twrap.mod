@@ -8,7 +8,8 @@ import (
 	"strings"
 )
 
-// calcNumDigits calculates the number of digits that will be needed to display the given value
+// calcNumDigits calculates the number of digits that will be needed to
+// display the given value
 func calcNumDigits(i int) int {
 	return int(math.Ceil(math.Log10(float64(i + 1))))
 }
@@ -17,7 +18,7 @@ func calcNumDigits(i int) int {
 // indent and with each item prefixed with the list prefix
 func (twc TWConf) List(list []string, indent int) {
 	for _, li := range list {
-		twc.WrapPrefixed(twc.ListPrefix+" ", li, indent)
+		twc.WrapPrefixed(twc.ListPrefix, li, indent)
 	}
 }
 
@@ -27,7 +28,7 @@ func (twc TWConf) IdxList(list []string, indent int) {
 	digits := calcNumDigits(len(list))
 	for i, li := range list {
 		twc.WrapPrefixed(
-			fmt.Sprintf("%s %*d: ", twc.ListPrefix, digits, i+1),
+			idxListPrefix(twc.ListPrefix, i+1, digits),
 			li,
 			indent)
 	}
@@ -39,7 +40,7 @@ func (twc TWConf) IdxList(list []string, indent int) {
 func (twc TWConf) NoRptList(list []string, indent int) {
 	prev := []rune{}
 	for _, li := range list {
-		twc.Print(strings.Repeat(" ", indent) + twc.ListPrefix + " ")
+		twc.Print(strings.Repeat(" ", indent) + twc.ListPrefix)
 		prev = twc.printUniqueStrParts(li, prev)
 	}
 }
@@ -66,7 +67,7 @@ func (twc TWConf) IdxNoRptList(list []string, indent int) {
 func (twc TWConf) NoRptPathList(list []string, indent int) {
 	prev := []string{}
 	for _, li := range list {
-		twc.Print(strings.Repeat(" ", indent) + twc.ListPrefix + " ")
+		twc.Print(strings.Repeat(" ", indent) + twc.ListPrefix)
 		dir, file := path.Split(li)
 		prev = twc.printUniqueDirParts(dir, prev)
 		twc.Print(file + "\n")
@@ -93,7 +94,7 @@ func (twc TWConf) IdxNoRptPathList(list []string, indent int) {
 
 // idxListPrefix will return a suitable indexed list prefix
 func idxListPrefix(listPfx string, i, digits int) string {
-	return fmt.Sprintf("%s %*d: ", listPfx, digits, i)
+	return fmt.Sprintf("%s%*d: ", listPfx, digits, i)
 }
 
 // printUniqueStrParts replaces the leading part of the string that is the

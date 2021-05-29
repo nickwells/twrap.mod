@@ -1,7 +1,6 @@
 package twrap
 
 import (
-	"fmt"
 	"math"
 	"strings"
 )
@@ -65,14 +64,14 @@ func (twc TWConf) Wrap3Indent(
 
 	for _, para := range paras {
 		if para != "" {
-			fmt.Fprint(twc.W, line1Prefix)
+			twc.Print(line1Prefix)
 		}
 
 		lineLen := 0
 		word := make([]rune, 0, len(para))
 		spaces := make([]rune, 0, maxLen)
 		for _, r := range para {
-			if r == ' ' {
+			if r == ' ' { // TODO: use unicode.IsSpace and disregard NBSP
 				if len(word) > 0 {
 					lineLen, maxLen = twc.printWord(word, spaces,
 						prefix,
@@ -91,7 +90,7 @@ func (twc TWConf) Wrap3Indent(
 			twc.printWord(word, spaces, prefix, lineLen, maxLen, line2MaxLen)
 		}
 
-		fmt.Fprintln(twc.W)
+		twc.Println()
 
 		line1Prefix = strings.Repeat(" ", paraLine1Indent)
 		maxLen = paraLine1MaxLen
@@ -103,17 +102,17 @@ func (twc TWConf) Wrap3Indent(
 func (twc TWConf) printWord(word, spaces []rune, prefix string, lineLen, maxLen, nextMaxLen int) (int, int) {
 	if lineLen == 0 {
 		// always print 1st word regardless of length (with leading spaces)
-		fmt.Fprint(twc.W, string(spaces)+string(word))
+		twc.Print(string(spaces) + string(word))
 		return len(spaces) + len(word), maxLen
 	}
 
 	if lineLen+len(word)+len(spaces) <= maxLen { // word & space fit in the line
 		lineLen += len(word) + len(spaces)
-		fmt.Fprint(twc.W, string(spaces)+string(word))
+		twc.Print(string(spaces) + string(word))
 		return lineLen, maxLen
 	}
 
-	fmt.Fprintln(twc.W)
-	fmt.Fprint(twc.W, prefix+string(word))
+	twc.Println()
+	twc.Print(prefix + string(word))
 	return len(word), nextMaxLen
 }

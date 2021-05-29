@@ -10,7 +10,7 @@ import (
 const (
 	DfltMinCharsToPrint = 30
 	DfltTargetLineLen   = 80
-	DfltListPrefix      = "-"
+	DfltListPrefix      = "- "
 )
 
 // TWConf holds the configuration for a text wrapper
@@ -31,8 +31,9 @@ func TWConfOptSetWriter(w io.Writer) TWConfOptFunc {
 	return SetWriter(w)
 }
 
-// SetWriter returns a TWConfOptFunc suitable for passing to
-// NewTWConf which will set the MinCharsToPrint
+// SetWriter returns a TWConfOptFunc suitable for passing to NewTWConf which
+// will set the Writer from the default value of os.Stdout. The writer must
+// not be nil.
 func SetWriter(w io.Writer) TWConfOptFunc {
 	return func(twc *TWConf) error {
 		if w == nil {
@@ -49,8 +50,9 @@ func TWConfOptSetMinChars(n int) TWConfOptFunc {
 	return SetMinChars(n)
 }
 
-// SetMinChars returns a TWConfOptFunc suitable for passing to
-// NewTWConf which will set the MinCharsToPrint
+// SetMinChars returns a TWConfOptFunc suitable for passing to NewTWConf
+// which will set the MinCharsToPrint. The value must be greater or equal to
+// zero.
 func SetMinChars(n int) TWConfOptFunc {
 	return func(twc *TWConf) error {
 		if n < 0 {
@@ -77,8 +79,9 @@ func TWConfOptSetTargetLineLen(n int) TWConfOptFunc {
 	return SetTargetLineLen(n)
 }
 
-// SetTargetLineLen returns a TWConfOptFunc suitable for passing to
-// NewTWConf which will set the TargetLineLen
+// SetTargetLineLen returns a TWConfOptFunc suitable for passing to NewTWConf
+// which will set the TargetLineLen. The new target line length must be
+// greater than zero.
 func SetTargetLineLen(n int) TWConfOptFunc {
 	return func(twc *TWConf) error {
 		if n <= 0 {
