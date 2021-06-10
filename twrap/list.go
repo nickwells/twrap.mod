@@ -3,8 +3,7 @@ package twrap
 import (
 	"fmt"
 	"math"
-	"os"
-	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -68,7 +67,7 @@ func (twc TWConf) NoRptPathList(list []string, indent int) {
 	prev := []string{}
 	for _, li := range list {
 		twc.Print(strings.Repeat(" ", indent) + twc.ListPrefix)
-		dir, file := path.Split(li)
+		dir, file := filepath.Split(li)
 		prev = twc.printUniqueDirParts(dir, prev)
 		twc.Print(file + "\n")
 	}
@@ -86,7 +85,7 @@ func (twc TWConf) IdxNoRptPathList(list []string, indent int) {
 	for i, li := range list {
 		twc.Print(strings.Repeat(" ", indent))
 		twc.Print(idxListPrefix(twc.ListPrefix, i+1, digits))
-		dir, file := path.Split(li)
+		dir, file := filepath.Split(li)
 		prev = twc.printUniqueDirParts(dir, prev)
 		twc.Print(file + "\n")
 	}
@@ -125,14 +124,13 @@ func (twc TWConf) printUniqueStrParts(s string, prev []rune) []rune {
 func (twc TWConf) printUniqueDirParts(dir string, prevParts []string) []string {
 	dirParts := []string{}
 	if dir != "" {
-		pathSep := string(os.PathSeparator)
+		dir = filepath.Clean(dir)
+		pathSep := string(filepath.Separator)
 		dirParts = strings.Split(dir, pathSep)
 		for i, dp := range dirParts {
-			if dp == "" {
-				break
-			}
 			if i >= len(prevParts) || dp != prevParts[i] {
 				twc.Print(strings.Join(dirParts[i:], pathSep))
+				twc.Print(pathSep)
 				break
 			}
 			twc.Print(strings.Repeat(" ", len(dp)+len(pathSep)))

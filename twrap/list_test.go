@@ -41,12 +41,12 @@ func TestList(t *testing.T) {
 		"part1/part4/entry7",
 		"part5/entry8",
 		"part5/part6/entry9",
-		"part5/part7/entry10",
-		"part5/part7/entry11",
-		"part5/part7/entry12",
-		"part5/part7/entry13",
-		"part5/part7/entry14",
-		"part5/part7/entry15",
+		"/part5/part7/entry10",
+		"/part5//part7/entry11",
+		"/part5/part7/entry12",
+		"/part5/part7/entry13",
+		"/part5/part7/entry14",
+		"/part5/part7/entry15",
 	}
 	testCases := []struct {
 		testhelper.ID
@@ -78,6 +78,15 @@ func TestList(t *testing.T) {
 		{
 			ID:     testhelper.MkID("10-entry-indent5"),
 			list:   list[0:10],
+			indent: 5,
+		},
+		{
+			ID:   testhelper.MkID("leading-sep-indent0"),
+			list: list[10:],
+		},
+		{
+			ID:     testhelper.MkID("leading-sep-indent5"),
+			list:   list[10:],
 			indent: 5,
 		},
 	}
