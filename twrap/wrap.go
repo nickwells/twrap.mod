@@ -105,7 +105,9 @@ func (twc TWConf) Wrap3Indent(
 
 // printWord prints the word and any leading spaces and returns the new line
 // length and the new max length
-func (twc TWConf) printWord(word, spaces []rune, prefix string, lineLen, maxLen, nextMaxLen int) (int, int) {
+func (twc TWConf) printWord(word, spaces []rune, prefix string,
+	lineLen, maxLen, nextMaxLen int,
+) (int, int) {
 	if lineLen == 0 {
 		// always print 1st word regardless of length (with leading spaces)
 		twc.Print(string(spaces) + string(word))
