@@ -26,6 +26,7 @@ type TWConf struct {
 type TWConfOptFunc func(*TWConf) error
 
 // TWConfOptSetWriter
+//
 // Deprecated: use SetWriter instead
 func TWConfOptSetWriter(w io.Writer) TWConfOptFunc {
 	return SetWriter(w)
@@ -45,6 +46,7 @@ func SetWriter(w io.Writer) TWConfOptFunc {
 }
 
 // TWConfOptSetMinChars
+//
 // Deprecated: use SetMinChars instead
 func TWConfOptSetMinChars(n int) TWConfOptFunc {
 	return SetMinChars(n)
@@ -74,6 +76,7 @@ func SetListPrefix(pfx string) TWConfOptFunc {
 }
 
 // TWConfOptSetTargetLineLen
+//
 // Deprecated: use SetTargetLineLen instead
 func TWConfOptSetTargetLineLen(n int) TWConfOptFunc {
 	return SetTargetLineLen(n)
