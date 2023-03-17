@@ -37,6 +37,29 @@ func (twc TWConf) Wrap2Indent(
 	twc.Wrap3Indent(text, firstLineIndent, firstLineIndent, otherLineIndent)
 }
 
+// calcMaxLen returns the max line length given the specified indent.
+func (twc TWConf) calcMaxLen(indent int) int {
+	return int(
+		math.Max(
+			float64(twc.MinCharsToPrint),
+			float64(twc.TargetLineLen-indent)))
+}
+
+// isAListItem returns true if the paragraph looks like an item in a
+// bulletted list - if the paragraph starts with one of '-', '*' or '+'
+// followed by a space
+func isAListItem(para string) bool {
+	return (strings.HasPrefix(para, "- ") ||
+		strings.HasPrefix(para, "* ") ||
+		strings.HasPrefix(para, "+ "))
+}
+
+// isABreakableSpace returns true if the rune is a space and is not equal to
+// the non-breakable space rune
+func isABreakableSpace(r rune) bool {
+	return unicode.IsSpace(r) && r != '\u00a0' // break on space, not NBSP
+}
+
 // Wrap3Indent will print the text as with Wrap. The first line printed will
 // be indented by the first supplied indent, thereafter the first line of
 // each paragraph will be indented by the second supplied indent and any
@@ -50,22 +73,15 @@ func (twc TWConf) Wrap3Indent(
 	}
 
 	// work out how much space we have between the indent and the end of line
-	line1MaxLen := int(
-		math.Max(
-			float64(twc.MinCharsToPrint),
-			float64(twc.TargetLineLen-line1Indent)))
-	paraLine1MaxLen := int(
-		math.Max(
-			float64(twc.MinCharsToPrint),
-			float64(twc.TargetLineLen-paraLine1Indent)))
-	line2MaxLen := int(
-		math.Max(
-			float64(twc.MinCharsToPrint),
-			float64(twc.TargetLineLen-line2Indent)))
+	var (
+		line1MaxLen     = twc.calcMaxLen(line1Indent)
+		paraLine1MaxLen = twc.calcMaxLen(paraLine1Indent)
+		line2MaxLen     = twc.calcMaxLen(line2Indent)
+	)
 
 	paras := paraBreakRE.Split(text, -1)
-	prefix := strings.Repeat(" ", line2Indent)
 	line1Prefix := strings.Repeat(" ", line1Indent)
+	line2Prefix := strings.Repeat(" ", line2Indent)
 	maxLen := line1MaxLen
 
 	for _, para := range paras {
@@ -73,15 +89,22 @@ func (twc TWConf) Wrap3Indent(
 			twc.Print(line1Prefix)
 		}
 
+		prefix := line2Prefix
+		secondLineMaxLen := line2MaxLen
+		if isAListItem(para) && line2MaxLen == maxLen {
+			prefix += "  "
+			secondLineMaxLen = twc.calcMaxLen(line2Indent + 2)
+		}
+
 		lineLen := 0
 		word := make([]rune, 0, len(para))
 		spaces := make([]rune, 0, maxLen)
 		for _, r := range para {
-			if unicode.IsSpace(r) && r != '\u00a0' { // break on space, not NBSP
+			if isABreakableSpace(r) {
 				if len(word) > 0 {
 					lineLen, maxLen = twc.printWord(word, spaces,
 						prefix,
-						lineLen, maxLen, line2MaxLen)
+						lineLen, maxLen, secondLineMaxLen)
 					word = word[:0]
 					spaces = spaces[:0]
 				}
@@ -93,7 +116,9 @@ func (twc TWConf) Wrap3Indent(
 		}
 
 		if len(word) > 0 {
-			twc.printWord(word, spaces, prefix, lineLen, maxLen, line2MaxLen)
+			twc.printWord(word, spaces,
+				prefix,
+				lineLen, maxLen, secondLineMaxLen)
 		}
 
 		twc.Println()

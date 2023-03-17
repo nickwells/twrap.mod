@@ -143,6 +143,71 @@ func TestWrap3Indent(t *testing.T) {
     hhh iii jjj
 `,
 		},
+		{
+			ID:                  testhelper.MkID("para with leading '# '"),
+			firstLineIndent:     10,
+			paraFirstLineIndent: 10,
+			otherLineIndent:     10,
+			text:                "aaa bbb\n# ddd eee fff ggg hhh iii jjj",
+			expText: `          aaa bbb
+          # ddd eee
+          fff ggg
+          hhh iii
+          jjj
+`,
+		},
+		{
+			ID:                  testhelper.MkID("para with leading '- '"),
+			firstLineIndent:     10,
+			paraFirstLineIndent: 10,
+			otherLineIndent:     10,
+			text:                "aaa bbb\n- ddd eee fff ggg hhh iii jjj",
+			expText: `          aaa bbb
+          - ddd eee
+            fff ggg
+            hhh iii
+            jjj
+`,
+		},
+		{
+			ID:                  testhelper.MkID("para with leading '* '"),
+			firstLineIndent:     10,
+			paraFirstLineIndent: 10,
+			otherLineIndent:     10,
+			text:                "aaa bbb\n* ddd eee fff ggg hhh iii jjj",
+			expText: `          aaa bbb
+          * ddd eee
+            fff ggg
+            hhh iii
+            jjj
+`,
+		},
+		{
+			ID:                  testhelper.MkID("para with leading '+ '"),
+			firstLineIndent:     10,
+			paraFirstLineIndent: 10,
+			otherLineIndent:     10,
+			text:                "aaa bbb\n+ ddd eee fff ggg hhh iii jjj",
+			expText: `          aaa bbb
+          + ddd eee
+            fff ggg
+            hhh iii
+            jjj
+`,
+		},
+		{
+			ID: testhelper.MkID(
+				"para with leading '+ ' but different otherLineIndent"),
+			firstLineIndent:     10,
+			paraFirstLineIndent: 10,
+			otherLineIndent:     9,
+			text:                "aaa bbb\n+ ddd eee fff ggg hhh iii jjj",
+			expText: `          aaa bbb
+          + ddd eee
+         fff ggg hhh
+         iii jjj
+`,
+		},
 	}
 
 	for _, tc := range testCases {
