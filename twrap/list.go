@@ -21,6 +21,11 @@ func (twc TWConf) List(list []string, indent int) {
 	}
 }
 
+// ListItem calls List it is simply a more convenient interface
+func (twc TWConf) ListItem(indent int, list ...string) {
+	twc.List(list, indent)
+}
+
 // IdxList will print the list of strings, one per line, with the
 // appropriate indent and with each item prefixed with an index number
 func (twc TWConf) IdxList(list []string, indent int) {
@@ -33,6 +38,11 @@ func (twc TWConf) IdxList(list []string, indent int) {
 	}
 }
 
+// IdxListItem calls IdxList it is simply a more convenient interface
+func (twc TWConf) IdxListItem(indent int, list ...string) {
+	twc.IdxList(list, indent)
+}
+
 // NoRptList will print a list of strings with no wrapping. Each list item
 // will have any characters from the start of the string which are common to
 // the preceding list item replaced with spaces
@@ -42,6 +52,11 @@ func (twc TWConf) NoRptList(list []string, indent int) {
 		twc.Print(strings.Repeat(" ", indent) + twc.ListPrefix)
 		prev = twc.printUniqueStrParts(li, prev)
 	}
+}
+
+// NoRptListItem calls NoRptList it is simply a more convenient interface
+func (twc TWConf) NoRptListItem(indent int, list ...string) {
+	twc.NoRptList(list, indent)
 }
 
 // IdxNoRptList will print a list of strings with no wrapping. Each
@@ -58,6 +73,12 @@ func (twc TWConf) IdxNoRptList(list []string, indent int) {
 	}
 }
 
+// IdxNoRptListItem calls IdxNoRptList it is simply a more convenient
+// interface
+func (twc TWConf) IdxNoRptListItem(indent int, list ...string) {
+	twc.IdxNoRptList(list, indent)
+}
+
 // NoRptPathList will print a list of strings with no wrapping. Each list
 // item is assumed to be a pathname and will have any part of the path
 // (except the last) which is the same as the corresponding part of the
@@ -71,6 +92,12 @@ func (twc TWConf) NoRptPathList(list []string, indent int) {
 		prev = twc.printUniqueDirParts(dir, prev)
 		twc.Print(file + "\n")
 	}
+}
+
+// NoRptPathListItem calls NoRptPathList it is simply a more convenient
+// interface
+func (twc TWConf) NoRptPathListItem(indent int, list ...string) {
+	twc.NoRptPathList(list, indent)
 }
 
 // IdxNoRptPathList will print a list of strings with no wrapping. Each list
@@ -89,6 +116,12 @@ func (twc TWConf) IdxNoRptPathList(list []string, indent int) {
 		prev = twc.printUniqueDirParts(dir, prev)
 		twc.Print(file + "\n")
 	}
+}
+
+// IdxNoRptPathListItem calls IdxNoRptPathList it is simply a more convenient
+// interface
+func (twc TWConf) IdxNoRptPathListItem(indent int, list ...string) {
+	twc.IdxNoRptPathList(list, indent)
 }
 
 // idxListPrefix will return a suitable indexed list prefix
