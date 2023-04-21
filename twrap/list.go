@@ -2,16 +2,11 @@ package twrap
 
 import (
 	"fmt"
-	"math"
 	"path/filepath"
 	"strings"
-)
 
-// calcNumDigits calculates the number of digits that will be needed to
-// display the given value
-func calcNumDigits(i int) int {
-	return int(math.Ceil(math.Log10(float64(i + 1))))
-}
+	"github.com/nickwells/mathutil.mod/v2/mathutil"
+)
 
 // List will print the list of strings, one per line, with the appropriate
 // indent and with each item prefixed with the list prefix
@@ -29,7 +24,7 @@ func (twc TWConf) ListItem(indent int, list ...string) {
 // IdxList will print the list of strings, one per line, with the
 // appropriate indent and with each item prefixed with an index number
 func (twc TWConf) IdxList(list []string, indent int) {
-	digits := calcNumDigits(len(list))
+	digits := mathutil.Digits(len(list))
 	for i, li := range list {
 		twc.WrapPrefixed(
 			idxListPrefix(twc.ListPrefix, i+1, digits),
@@ -64,7 +59,7 @@ func (twc TWConf) NoRptListItem(indent int, list ...string) {
 // characters from the start of the string which are common to the preceding
 // list item replaced with spaces
 func (twc TWConf) IdxNoRptList(list []string, indent int) {
-	digits := calcNumDigits(len(list))
+	digits := mathutil.Digits(len(list))
 	prev := []rune{}
 	for i, li := range list {
 		twc.Print(strings.Repeat(" ", indent))
@@ -107,7 +102,7 @@ func (twc TWConf) NoRptPathListItem(indent int, list ...string) {
 // with spaces. As soon as any part of the path differs, the remainder is
 // printed as is.
 func (twc TWConf) IdxNoRptPathList(list []string, indent int) {
-	digits := calcNumDigits(len(list))
+	digits := mathutil.Digits(len(list))
 	prev := []string{}
 	for i, li := range list {
 		twc.Print(strings.Repeat(" ", indent))
