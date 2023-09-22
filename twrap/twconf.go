@@ -115,7 +115,7 @@ func NewTWConf(opts ...TWConfOptFunc) (*TWConf, error) {
 	if twc.MinCharsToPrint > twc.TargetLineLen {
 		return nil,
 			fmt.Errorf("the minimum number of characters to print (%d)"+
-				" must be less than the target line length (%d)",
+				" must not be greater than the target line length (%d)",
 				twc.MinCharsToPrint, twc.TargetLineLen)
 	}
 	return twc, nil
