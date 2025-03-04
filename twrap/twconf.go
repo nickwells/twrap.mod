@@ -40,7 +40,9 @@ func SetWriter(w io.Writer) TWConfOptFunc {
 		if w == nil {
 			return errors.New("the Writer must not be nil")
 		}
+
 		twc.W = w
+
 		return nil
 	}
 }
@@ -61,7 +63,9 @@ func SetMinChars(n int) TWConfOptFunc {
 			return errors.New(
 				"the minimum number of chars to print on a line must be >= 0")
 		}
+
 		twc.MinCharsToPrint = n
+
 		return nil
 	}
 }
@@ -90,7 +94,9 @@ func SetTargetLineLen(n int) TWConfOptFunc {
 		if n <= 0 {
 			return errors.New("the target line length must be > 0")
 		}
+
 		twc.TargetLineLen = n
+
 		return nil
 	}
 }
@@ -112,12 +118,14 @@ func NewTWConf(opts ...TWConfOptFunc) (*TWConf, error) {
 			return nil, err
 		}
 	}
+
 	if twc.MinCharsToPrint > twc.TargetLineLen {
 		return nil,
 			fmt.Errorf("the minimum number of characters to print (%d)"+
 				" must not be greater than the target line length (%d)",
 				twc.MinCharsToPrint, twc.TargetLineLen)
 	}
+
 	return twc, nil
 }
 
@@ -130,5 +138,6 @@ func NewTWConfOrPanic(opts ...TWConfOptFunc) *TWConf {
 	if err != nil {
 		panic(fmt.Errorf("Couldn't create a new TWConf: %w", err))
 	}
+
 	return twc
 }

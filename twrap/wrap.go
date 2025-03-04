@@ -91,14 +91,17 @@ func (twc TWConf) Wrap3Indent(
 
 		prefix := line2Prefix
 		secondLineMaxLen := line2MaxLen
+
 		if isAListItem(para) && line2MaxLen == maxLen {
-			prefix += "  "
-			secondLineMaxLen = twc.calcMaxLen(line2Indent + 2)
+			listIndent := "  "
+			prefix += listIndent
+			secondLineMaxLen = twc.calcMaxLen(line2Indent + len(listIndent))
 		}
 
 		lineLen := 0
 		word := make([]rune, 0, len(para))
 		spaces := make([]rune, 0, maxLen)
+
 		for _, r := range para {
 			if isABreakableSpace(r) {
 				if len(word) > 0 {
@@ -142,10 +145,12 @@ func (twc TWConf) printWord(word, spaces []rune, prefix string,
 	if lineLen+len(word)+len(spaces) <= maxLen { // word & space fit in the line
 		lineLen += len(word) + len(spaces)
 		twc.Print(string(spaces) + string(word))
+
 		return lineLen, maxLen
 	}
 
 	twc.Println()
 	twc.Print(prefix + string(word))
+
 	return len(word), nextMaxLen
 }

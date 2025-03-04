@@ -74,6 +74,7 @@ bbb ccc
 
 	for _, tc := range testCases {
 		var buf bytes.Buffer
+
 		twc, err := twrap.NewTWConf(
 			twrap.TWConfOptSetWriter(&buf),
 			twrap.TWConfOptSetMinChars(10),
@@ -81,6 +82,7 @@ bbb ccc
 		if err != nil {
 			t.Fatal(tc.IDStr(), ": Couldn't create the TWConf: ", err)
 		}
+
 		twc.Wrap(tc.text, tc.indent)
 		testhelper.DiffString(t, tc.IDStr(), "wrapped text",
 			buf.String(), tc.expText)
@@ -109,6 +111,7 @@ func TestWrap2Indent(t *testing.T) {
 
 	for _, tc := range testCases {
 		var buf bytes.Buffer
+
 		twc, err := twrap.NewTWConf(
 			twrap.TWConfOptSetWriter(&buf),
 			twrap.TWConfOptSetMinChars(10),
@@ -116,10 +119,10 @@ func TestWrap2Indent(t *testing.T) {
 		if err != nil {
 			t.Fatal(tc.IDStr(), ": Couldn't create the TWConf: ", err)
 		}
+
 		twc.Wrap2Indent(tc.text, tc.firstLineIndent, tc.otherLineIndent)
 		testhelper.DiffString(t, tc.IDStr(), "wrapped text",
 			buf.String(), tc.expText)
-
 	}
 }
 
@@ -212,6 +215,7 @@ func TestWrap3Indent(t *testing.T) {
 
 	for _, tc := range testCases {
 		var buf bytes.Buffer
+
 		twc, err := twrap.NewTWConf(
 			twrap.TWConfOptSetWriter(&buf),
 			twrap.TWConfOptSetMinChars(10),
@@ -219,6 +223,7 @@ func TestWrap3Indent(t *testing.T) {
 		if err != nil {
 			t.Fatal(tc.IDStr(), ": Couldn't create the TWConf: ", err)
 		}
+
 		twc.Wrap3Indent(tc.text,
 			tc.firstLineIndent, tc.paraFirstLineIndent, tc.otherLineIndent)
 		testhelper.DiffString(t, tc.IDStr(), "wrapped text",

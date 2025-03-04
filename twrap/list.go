@@ -43,6 +43,7 @@ func (twc TWConf) IdxListItem(indent int, list ...string) {
 // the preceding list item replaced with spaces
 func (twc TWConf) NoRptList(list []string, indent int) {
 	prev := []rune{}
+
 	for _, li := range list {
 		twc.Print(strings.Repeat(" ", indent) + twc.ListPrefix)
 		prev = twc.printUniqueStrParts(li, prev)
@@ -61,6 +62,7 @@ func (twc TWConf) NoRptListItem(indent int, list ...string) {
 func (twc TWConf) IdxNoRptList(list []string, indent int) {
 	digits := mathutil.Digits(len(list))
 	prev := []rune{}
+
 	for i, li := range list {
 		twc.Print(strings.Repeat(" ", indent))
 		twc.Print(idxListPrefix(twc.ListPrefix, i+1, digits))
@@ -81,10 +83,13 @@ func (twc TWConf) IdxNoRptListItem(indent int, list ...string) {
 // differs, the remainder is printed as is.
 func (twc TWConf) NoRptPathList(list []string, indent int) {
 	prev := []string{}
+
 	for _, li := range list {
 		twc.Print(strings.Repeat(" ", indent) + twc.ListPrefix)
+
 		dir, file := filepath.Split(li)
 		prev = twc.printUniqueDirParts(dir, prev)
+
 		twc.Print(file + "\n")
 	}
 }
@@ -104,11 +109,14 @@ func (twc TWConf) NoRptPathListItem(indent int, list ...string) {
 func (twc TWConf) IdxNoRptPathList(list []string, indent int) {
 	digits := mathutil.Digits(len(list))
 	prev := []string{}
+
 	for i, li := range list {
 		twc.Print(strings.Repeat(" ", indent))
 		twc.Print(idxListPrefix(twc.ListPrefix, i+1, digits))
+
 		dir, file := filepath.Split(li)
 		prev = twc.printUniqueDirParts(dir, prev)
+
 		twc.Print(file + "\n")
 	}
 }
@@ -130,17 +138,21 @@ func idxListPrefix(listPfx string, i, digits int) string {
 func (twc TWConf) printUniqueStrParts(s string, prev []rune) []rune {
 	ra := []rune(s)
 	out := make([]rune, 0, len(s))
+
 	for i, r := range ra {
 		if i >= len(prev) {
 			out = append(out, ra[i:]...)
 			break
 		}
+
 		if r != prev[i] {
 			out = append(out, ra[i:]...)
 			break
 		}
+
 		out = append(out, ' ')
 	}
+
 	twc.Print(string(out) + "\n")
 
 	return ra
@@ -151,18 +163,23 @@ func (twc TWConf) printUniqueStrParts(s string, prev []rune) []rune {
 // returns the split directory for setting the prevParts for the next call
 func (twc TWConf) printUniqueDirParts(dir string, prevParts []string) []string {
 	dirParts := []string{}
+
 	if dir != "" {
 		dir = filepath.Clean(dir)
 		pathSep := string(filepath.Separator)
+
 		dirParts = strings.Split(dir, pathSep)
 		for i, dp := range dirParts {
 			if i >= len(prevParts) || dp != prevParts[i] {
 				twc.Print(strings.Join(dirParts[i:], pathSep))
 				twc.Print(pathSep)
+
 				break
 			}
+
 			twc.Print(strings.Repeat(" ", len(dp)+len(pathSep)))
 		}
 	}
+
 	return dirParts
 }
