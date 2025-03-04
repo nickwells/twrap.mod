@@ -1,6 +1,6 @@
 module github.com/nickwells/twrap.mod
 
-go 1.18
+go 1.24
 
 require (
 	github.com/nickwells/mathutil.mod/v2 v2.3.0
