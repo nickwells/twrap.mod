@@ -106,7 +106,7 @@ func TestList(t *testing.T) {
 			var b bytes.Buffer
 			twc := twrap.NewTWConfOrPanic(twrap.SetWriter(&b))
 			l.f(*twc, tc.list, tc.indent)
-			gfcList.Check(t, tc.IDStr()+l.name, tc.ID.Name+l.name, b.Bytes())
+			gfcList.Check(t, tc.IDStr()+l.name, tc.Name+l.name, b.Bytes())
 		}
 	}
 }
