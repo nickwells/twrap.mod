@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// These establish the default values for a TWConf.
 const (
 	DfltMinCharsToPrint = 30
 	DfltTargetLineLen   = 80
@@ -25,7 +26,8 @@ type TWConf struct {
 // NewTWConf function to override the default values
 type TWConfOptFunc func(*TWConf) error
 
-// TWConfOptSetWriter
+// TWConfOptSetWriter returns an option func that will set the writer on a
+// TWConf
 //
 // Deprecated: use SetWriter instead
 func TWConfOptSetWriter(w io.Writer) TWConfOptFunc {
@@ -47,7 +49,8 @@ func SetWriter(w io.Writer) TWConfOptFunc {
 	}
 }
 
-// TWConfOptSetMinChars
+// TWConfOptSetMinChars returns an option func that will set the minimum
+// characters on a TWConf
 //
 // Deprecated: use SetMinChars instead
 func TWConfOptSetMinChars(n int) TWConfOptFunc {
@@ -79,7 +82,8 @@ func SetListPrefix(pfx string) TWConfOptFunc {
 	}
 }
 
-// TWConfOptSetTargetLineLen
+// TWConfOptSetTargetLineLen returns an option func that will set the target
+// line length on a TWConf
 //
 // Deprecated: use SetTargetLineLen instead
 func TWConfOptSetTargetLineLen(n int) TWConfOptFunc {
@@ -136,7 +140,7 @@ func NewTWConf(opts ...TWConfOptFunc) (*TWConf, error) {
 func NewTWConfOrPanic(opts ...TWConfOptFunc) *TWConf {
 	twc, err := NewTWConf(opts...)
 	if err != nil {
-		panic(fmt.Errorf("Couldn't create a new TWConf: %w", err))
+		panic(fmt.Errorf("couldn't create a new TWConf: %w", err))
 	}
 
 	return twc
