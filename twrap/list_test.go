@@ -103,7 +103,7 @@ func TestList(t *testing.T) {
 			{f: twrap.TWConf.IdxNoRptList, name: "-IdxNoRptList"},
 			{f: twrap.TWConf.IdxNoRptPathList, name: "-IdxNoRptPathList"},
 		} {
-			var b bytes.Buffer
+			b := bytes.Buffer{}
 			twc := twrap.NewTWConfOrPanic(twrap.SetWriter(&b))
 			l.f(*twc, tc.list, tc.indent)
 			gfcList.Check(t, tc.IDStr()+l.name, tc.Name+l.name, b.Bytes())
